@@ -270,7 +270,7 @@ import * as Print from "expo-print";
 import * as WebBrowser from "expo-web-browser";
 import * as Sharing from "expo-sharing";
 import { Asset } from "expo-asset";
-import * as FileSystem from "expo-file-system";
+// import * as FileSystem from "expo-file-system";
 
 const ReceiptPDF = ({ transaction, customConfig = {} }) => {
   const [logoBase64, setLogoBase64] = useState("");

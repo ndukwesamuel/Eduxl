@@ -57,6 +57,7 @@ import RunnerNavigation from "./App/Runners/RunnerNavigation";
 import GuestNavigation from "./App/Guest/Navigation/GuestNavigation";
 import UserAccountNavigation from "./eduxl/navigation/UserAccountNavigation";
 import UserTabNavigation from "./eduxl/navigation/UserTabNavigation";
+import UserStackNavigation from "./eduxl/navigation/UserStackNavigation";
 
 const queryClient = new QueryClient();
 
@@ -265,7 +266,8 @@ export const NavigationScreen = () => {
       {forceUpdate ? (
         <UpdateScreen message={updateInfo?.message} />
       ) : (
-        <>{user__data ? <UserTabNavigation /> : <StartScreen />}</>
+        // <>{user__data ? <UserTabNavigation /> : <StartScreen />}</>
+        <>{user__data ? <UserStackNavigation /> : <StartScreen />}</>
       )}
       <Toast />
     </NavigationContainer>

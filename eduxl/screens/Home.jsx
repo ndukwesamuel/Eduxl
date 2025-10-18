@@ -374,12 +374,12 @@ import {
   StatusBar,
 } from "react-native";
 
-export default function Home() {
+export default function Home({navigation}) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <StatusBar barStyle="dark-content" />
 
-      {/* Header */}
+      {/* Header */}\
       <View
         style={{
           flexDirection: "row",
@@ -454,10 +454,13 @@ export default function Home() {
             alignItems: "center",
             marginBottom: 12,
             shadowColor: "#000",
-            shadowOffset: { width: 0, height: 2 },
+            shadowOffset: { width: 0, height: 1 },
             shadowOpacity: 0.1,
             shadowRadius: 4,
             elevation: 3,
+          }}
+          onPress={() => {
+            navigation.navigate("SubjectDisplay");
           }}
         >
           <View
@@ -800,7 +803,7 @@ export default function Home() {
       </ScrollView>
 
       {/* Bottom Navigation */}
-      <View
+      {/* <View
         style={{
           flexDirection: "row",
           justifyContent: "space-around",
@@ -826,7 +829,7 @@ export default function Home() {
         <TouchableOpacity style={{ alignItems: "center" }}>
           <Text style={{ fontSize: 24, color: "#999" }}>☰</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 }
