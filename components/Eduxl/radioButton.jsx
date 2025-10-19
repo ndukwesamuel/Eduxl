@@ -5,41 +5,28 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-const RadioButton = ({ item }) => {
-  const [isActive, setIsActive] = useState(false);
-
-  function handleClickEvent() {
-    setIsActive(!isActive);
-  }
-
-  //   return (
-  //       <Pressable style={styles.radioButton(isActive)}
-  //       onPress={handleClickEvent}>
-  //     </Pressable>
-  //   )
-
+const RadioButton = ({ item, isSelected, onToggle }) => {
   return (
-    <TouchableOpacity
-      onPress={handleClickEvent}
-      style={styles.container(isActive)}
-    >
-      <Pressable style={styles.radioButton(isActive)}></Pressable>
-          <View style={{
-              flexDirection: 'row', alignItems: 'center'
-      }}>
+    <TouchableOpacity onPress={onToggle} style={styles.container(isSelected)}>
+      <Pressable style={styles.radioButton(isSelected)}></Pressable>
+
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
         <AntDesign name="book" size={28} color="#05b405ff" />
-        <View>
-          <Text>{item.subject}</Text>
-          <Text>{item.NoOfQuestions} Questions</Text>
+        <View style={{ marginLeft: 10 }}>
+          <Text style={{ fontSize: 16, fontWeight: "600" }}>
+            {item.subject}
+          </Text>
+          <Text style={{ color: "#555" }}>{item.NoOfQuestions} Questions</Text>
         </View>
       </View>
+
       <Text
         style={{
-          color: isActive ? "#fff" : "#05b405ff",
-          backgroundColor: isActive ? "#05b405ff" : "#c7c5c5ff",
+          color: isSelected ? "#fff" : "#05b405ff",
+          backgroundColor: isSelected ? "#05b405ff" : "#c7c5c5ff",
           fontSize: 15,
           fontWeight: "900",
           paddingHorizontal: 10,
@@ -47,7 +34,7 @@ const RadioButton = ({ item }) => {
           borderRadius: 50,
         }}
       >
-        {isActive ? "non" : "Setup"}
+        {isSelected ? "✓ Added" : "Setup"}
       </Text>
     </TouchableOpacity>
   );
@@ -55,7 +42,6 @@ const RadioButton = ({ item }) => {
 
 const styles = StyleSheet.create({
   container: (isActive) => ({
-    flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -70,7 +56,7 @@ const styles = StyleSheet.create({
     height: 35,
     width: 35,
     borderRadius: 50,
-    borderBlockColor: "#000",
+    borderColor: "#000",
     borderWidth: isActive ? 0 : 2,
     backgroundColor: isActive ? "#000" : "#fff",
   }),
