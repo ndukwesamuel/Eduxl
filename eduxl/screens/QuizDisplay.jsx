@@ -8,12 +8,10 @@ import {
   StyleSheet,
   StatusBar,
   ActivityIndicator,
-  useWindowDimensions,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 
 const QuizDisplay = () => {
-  const { width } = useWindowDimensions();
   const route = useRoute();
   const { subject, year, numQuestions } = route.params || {};
 

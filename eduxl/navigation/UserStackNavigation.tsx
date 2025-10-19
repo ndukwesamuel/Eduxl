@@ -10,7 +10,7 @@ const stack = createStackNavigator();
 
 export default function UserStackNavigation() {
     return (
-      <stack.Navigator initialRouteName="FirstPage">
+      <stack.Navigator initialRouteName="FirstPage" screenOptions={{headerShown: false}}>
         <stack.Screen name="FirstPage" component={UserTabNavigation} />
         <stack.Screen
           name="SubjectDisplay"
