@@ -61,9 +61,11 @@ export default function QuizSetup() {
         >
           <Text style={styles.navButtonText}>{"<"}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton}>
-          <Text style={styles.navButtonText}>{"+"}</Text>
-        </TouchableOpacity>
+        {/* <TouchableOpacity style={styles.navButton} */}
+        {/* onPress={() => navigation.g} */}
+        {/* > */}
+          {/* <Text style={styles.navButtonText}>{"+"}</Text> */}
+        {/* </TouchableOpacity> */}
       </View>
 
       <Text style={styles.header}>Available Subjects</Text>

@@ -9,19 +9,18 @@ import {
   StatusBar,
   ActivityIndicator,
 } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 
 const QuizDisplay = () => {
   const route = useRoute();
+  const navigation = useNavigation();
   const { subject, year, numQuestions } = route.params || {};
 
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [showAnswer, setShowAnswer] = useState(false);
-
-  
+  const [selectedAnswers, setSelectedAnswers] = useState({});
+  const [quizCompleted, setQuizCompleted] = useState(false);
 
   // ==============================
   // 📦 Load Questions
@@ -34,8 +33,8 @@ const QuizDisplay = () => {
         );
         const data = await res.json();
 
-        const allQuestions = data.data[0].questionSets.flatMap((set) =>
-          set.questions.map((q) => ({
+        const allQuestions = data.data[0].questionSets.flatMap((set) => {
+          return set.questions.map((q) => ({
             id: q._id,
             question: q.question,
             options: [q.option.a, q.option.b, q.option.c, q.option.d],
@@ -47,8 +46,8 @@ const QuizDisplay = () => {
             examYear: q.examyear,
             subject: data.data[0].subject,
           }))
-        );
- 
+        });
+        
 
         // Filter by subject and year
         let filtered = allQuestions.filter(
@@ -56,6 +55,7 @@ const QuizDisplay = () => {
             q.subject?.toLowerCase() === subject.toLowerCase() &&
             q.examYear?.toString() === year.toString()
         );
+        
 
         // Limit to numQuestions
         if (filtered.length > numQuestions) {
@@ -80,43 +80,57 @@ const QuizDisplay = () => {
   // 🔧 Functions
   // ==============================
   const handleSelectAnswer = (index) => {
-    if (!showAnswer) setSelectedAnswer(index);
-  };
-
-  const handleCheckAnswer = () => {
-    setShowAnswer(true);
+    setSelectedAnswers((prev) => ({
+      ...prev,
+      [currentQuestionIndex]: index,
+    }));
   };
 
   const handleNextQuestion = () => {
-    if (!isLastQuestion) {
+    if (isLastQuestion) {
+      setQuizCompleted(true);
+    } else {
       setCurrentQuestionIndex((prev) => prev + 1);
-      setSelectedAnswer(null);
-      setShowAnswer(false);
     }
   };
 
   const handlePreviousQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex((prev) => prev - 1);
-      setSelectedAnswer(null);
-      setShowAnswer(false);
     }
   };
 
   const handleRestart = () => {
     setCurrentQuestionIndex(0);
-    setSelectedAnswer(null);
-    setShowAnswer(false);
+    setSelectedAnswers({});
+    setQuizCompleted(false);
   };
 
   const getOptionStyle = (index) => {
-    if (!showAnswer) {
-      return index === selectedAnswer ? styles.selectedOption : styles.option;
-    }
-    if (index === currentQuestion.correctAnswer) return styles.correctOption;
-    if (index === selectedAnswer && index !== currentQuestion.correctAnswer)
-      return styles.wrongOption;
-    return styles.option;
+    const selected = selectedAnswers[currentQuestionIndex];
+    return index === selected ? styles.selectedOption : styles.option;
+  };
+
+  // ==============================
+  // 🧮 Result Logic
+  // ==============================
+  const calculateResults = () => {
+    let score = 0;
+    let wrongQuestions = [];
+
+    questions.forEach((q, index) => {
+      const userAnswer = selectedAnswers[index];
+      if (userAnswer === q.correctAnswer) {
+        score++;
+      } else {
+        wrongQuestions.push({
+          ...q,
+          userAnswer,
+        });
+      }
+    });
+
+    return { score, total: questions.length, wrongQuestions };
   };
 
   // ==============================
@@ -141,6 +155,76 @@ const QuizDisplay = () => {
     );
   }
 
+  // ==============================
+  // 📊 Results Page
+  // ==============================
+  if (quizCompleted) {
+    const { score, total, wrongQuestions } = calculateResults();
+
+    return (
+      <SafeAreaView style={styles.container}>
+        <ScrollView style={styles.content}>
+          <Text style={styles.resultTitle}>Quiz Completed!</Text>
+          <Text style={styles.resultScore}>
+            You scored {score} / {total}
+          </Text>
+
+          {wrongQuestions.length > 0 ? (
+            <>
+              <Text style={styles.sectionTitle}>Questions you missed:</Text>
+              {wrongQuestions.map((q, i) => (
+                <View key={i} style={styles.explanationCard}>
+                  <Text style={styles.questionText}>{q.question}</Text>
+                  <Text style={styles.explanationText}>
+                    Your Answer:{" "}
+                    {q.userAnswer !== undefined
+                      ? String.fromCharCode(65 + q.userAnswer)
+                      : "No answer selected"}
+                  </Text>
+                  <Text style={styles.correctText}>
+                    Correct Answer: {String.fromCharCode(65 + q.correctAnswer)}
+                  </Text>
+                  <Text style={styles.explanationText}>
+                    Explanation: {q.explanation || "No explanation provided"}
+                  </Text>
+                </View>
+              ))}
+            </>
+          ) : (
+            <Text style={styles.allCorrect}>
+              🎉 Perfect! You got all correct!
+            </Text>
+          )}
+
+          <TouchableOpacity
+            style={[styles.button, styles.restartButton]}
+            onPress={handleRestart}
+          >
+            <Text style={styles.buttonText}>Restart Quiz</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, styles.restartButton]}
+            onPress={() =>
+              navigation.navigate("QuizSetup", {
+                selectedSubjects: [
+                  {
+                    subject: subject,
+                    NoOfQuestions: numQuestions,
+                  },
+                ],
+              })
+            }
+          >
+            <Text style={styles.buttonText}>Back to Quiz Setup Page</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+
+  // ==============================
+  // 🧩 Quiz Question Page
+  // ==============================
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#059205ff" />
@@ -168,7 +252,6 @@ const QuizDisplay = () => {
               key={index}
               style={getOptionStyle(index)}
               onPress={() => handleSelectAnswer(index)}
-              disabled={showAnswer}
             >
               <Text style={styles.optionLabel}>
                 {String.fromCharCode(65 + index)}.
@@ -178,72 +261,43 @@ const QuizDisplay = () => {
           ))}
         </View>
 
-        {/* Explanation */}
-        {showAnswer && (
-          <View style={styles.explanationCard}>
-            <Text style={styles.explanationTitle}>
-              {selectedAnswer === currentQuestion.correctAnswer
-                ? "✓ Correct!"
-                : "✗ Wrong!"}
-            </Text>
-            <Text style={styles.explanationText}>
-              {currentQuestion.explanation}
-            </Text>
-          </View>
-        )}
+        {/* Navigation Buttons */}
+        <View style={styles.navigationButtons}>
+          <TouchableOpacity
+            style={[
+              styles.button,
+              styles.navButton,
+              currentQuestionIndex === 0 && styles.disabledButton,
+            ]}
+            onPress={handlePreviousQuestion}
+            disabled={currentQuestionIndex === 0}
+          >
+            <Text style={styles.buttonText}>Previous</Text>
+          </TouchableOpacity>
 
-        {/* Buttons */}
-        <View style={styles.buttonContainer}>
-          {!showAnswer ? (
-            <TouchableOpacity
-              style={[
-                styles.button,
-                styles.checkButton,
-                selectedAnswer === null && styles.disabledButton,
-              ]}
-              onPress={handleCheckAnswer}
-              disabled={selectedAnswer === null}
-            >
-              <Text style={styles.buttonText}>Check Answer</Text>
-            </TouchableOpacity>
-          ) : (
-            <View style={styles.navigationButtons}>
-              <TouchableOpacity
-                style={[
-                  styles.button,
-                  styles.navButton,
-                  currentQuestionIndex === 0 && styles.disabledButton,
-                ]}
-                onPress={handlePreviousQuestion}
-                disabled={currentQuestionIndex === 0}
-              >
-                <Text style={styles.buttonText}>Previous</Text>
-              </TouchableOpacity>
-
-              {!isLastQuestion ? (
-                <TouchableOpacity
-                  style={[styles.button, styles.navButton]}
-                  onPress={handleNextQuestion}
-                >
-                  <Text style={styles.buttonText}>Next</Text>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  style={[styles.button, styles.restartButton]}
-                  onPress={handleRestart}
-                >
-                  <Text style={styles.buttonText}>Restart</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          )}
+          <TouchableOpacity
+            style={[
+              styles.button,
+              styles.navButton,
+              selectedAnswers[currentQuestionIndex] == null &&
+                styles.disabledButton,
+            ]}
+            onPress={handleNextQuestion}
+            disabled={selectedAnswers[currentQuestionIndex] == null}
+          >
+            <Text style={styles.buttonText}>
+              {isLastQuestion ? "Finish Quiz" : "Next"}
+            </Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
+// ==============================
 // 💅 Styles
+// ==============================
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#f3f4f6", paddingVertical: 25 },
   loadingContainer: {
@@ -281,14 +335,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#dbeafe",
     borderColor: "#059205ff",
   },
-  correctOption: {
-    backgroundColor: "#dcfce7",
-    borderColor: "#16a34a",
-  },
-  wrongOption: {
-    backgroundColor: "#fee2e2",
-    borderColor: "#dc2626",
-  },
   optionLabel: {
     fontSize: 16,
     fontWeight: "700",
@@ -297,29 +343,49 @@ const styles = StyleSheet.create({
     minWidth: 24,
   },
   optionText: { fontSize: 16, color: "#374151", flex: 1 },
-  explanationCard: {
-    backgroundColor: "#fef3c7",
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 20,
-    borderLeftWidth: 4,
-    borderLeftColor: "#f59e0b",
-  },
-  explanationTitle: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: "#92400e",
-    marginBottom: 8,
-  },
-  explanationText: { fontSize: 14, color: "#78350f", lineHeight: 20 },
-  buttonContainer: { marginBottom: 20 },
+  navigationButtons: { flexDirection: "row", gap: 12 },
   button: { padding: 16, borderRadius: 8, alignItems: "center" },
-  checkButton: { backgroundColor: "#059205ff" },
   navButton: { backgroundColor: "#059205ff", flex: 1 },
-  restartButton: { backgroundColor: "#16a34a", flex: 1 },
+  restartButton: { backgroundColor: "#16a34a", marginTop: 20 },
   disabledButton: { backgroundColor: "#9ca3af", opacity: 0.6 },
   buttonText: { color: "#ffffff", fontSize: 16, fontWeight: "600" },
-  navigationButtons: { flexDirection: "row", gap: 12 },
+
+  // Results Styles
+  resultTitle: {
+    fontSize: 24,
+    fontWeight: "700",
+    textAlign: "center",
+    color: "#059205ff",
+    marginBottom: 10,
+  },
+  resultScore: {
+    fontSize: 20,
+    textAlign: "center",
+    marginBottom: 20,
+    color: "#374151",
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#111827",
+    marginBottom: 8,
+  },
+  explanationCard: {
+    backgroundColor: "#fff",
+    padding: 14,
+    borderRadius: 10,
+    borderLeftWidth: 4,
+    borderLeftColor: "#f59e0b",
+    marginBottom: 15,
+  },
+  explanationText: { fontSize: 14, color: "#78350f", lineHeight: 20 },
+  correctText: { fontSize: 14, color: "#16a34a", marginBottom: 6 },
+  allCorrect: {
+    fontSize: 16,
+    color: "#16a34a",
+    textAlign: "center",
+    marginVertical: 20,
+  },
 });
 
 export default QuizDisplay;

@@ -379,7 +379,7 @@ export default function Home({navigation}) {
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <StatusBar barStyle="dark-content" />
 
-      {/* Header */}\
+      {/* Header */}
       <View
         style={{
           flexDirection: "row",
