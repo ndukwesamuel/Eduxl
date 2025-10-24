@@ -98,6 +98,24 @@ const DisplayAvaliableSubject = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <TouchableOpacity
+                style={styles.navButton}
+                onPress={() => navigation.goBack()}
+              >
+                <Text style={styles.navButtonText}>{"<"}</Text>
+              </TouchableOpacity>
+              {/* <TouchableOpacity style={styles.navButton} */}
+              {/* onPress={() => navigation.g} */}
+              {/* > */}
+                {/* <Text style={styles.navButtonText}>{"+"}</Text> */}
+              {/* </TouchableOpacity> */}
+            </View>
       {/* Floating Continue Button (disabled if no selection) */}
       <TouchableOpacity
         style={[
@@ -144,6 +162,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#fcfcfcff",
     paddingHorizontal: 10,
     paddingVertical: 40,
+  },
+  navButton: {
+    paddingVertical: 5,
+    paddingHorizontal: 12,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: "#059205ff",
+    marginBottom: 8,
+  },
+  navButtonText: {
+    fontSize: 20,
+    color: "#059205ff",
   },
   center: {
     flex: 1,
