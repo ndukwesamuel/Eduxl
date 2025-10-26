@@ -178,7 +178,7 @@
 //               marginRight: 12
 //             }}>
 //               <View style={{
-//                 width: 90,
+//                 width: 70,
 //                 height: 90,
 //                 backgroundColor: '#E8E0D8',
 //                 borderRadius: 16,
@@ -583,8 +583,8 @@ export default function Home({navigation}) {
             >
               <View
                 style={{
-                  width: 90,
-                  height: 90,
+                  width: 70,
+                  height: 70,
                   backgroundColor: "#E8E0D8",
                   borderRadius: 16,
                   justifyContent: "center",
@@ -608,8 +608,8 @@ export default function Home({navigation}) {
             >
               <View
                 style={{
-                  width: 90,
-                  height: 90,
+                  width: 70,
+                  height: 70,
                   backgroundColor: "#E8D5F0",
                   borderRadius: 16,
                   justifyContent: "center",
@@ -640,8 +640,8 @@ export default function Home({navigation}) {
             >
               <View
                 style={{
-                  width: 90,
-                  height: 90,
+                  width: 70,
+                  height: 70,
                   backgroundColor: "#D1E8F5",
                   borderRadius: 16,
                   justifyContent: "center",
@@ -659,8 +659,8 @@ export default function Home({navigation}) {
             <TouchableOpacity style={{ flex: 1, alignItems: "center" }}>
               <View
                 style={{
-                  width: 90,
-                  height: 90,
+                  width: 70,
+                  height: 70,
                   backgroundColor: "#FFD8D8",
                   borderRadius: 16,
                   justifyContent: "center",
@@ -686,8 +686,8 @@ export default function Home({navigation}) {
             >
               <View
                 style={{
-                  width: 90,
-                  height: 90,
+                  width: 70,
+                  height: 70,
                   backgroundColor: "#D1F2F8",
                   borderRadius: 16,
                   justifyContent: "center",
@@ -718,8 +718,8 @@ export default function Home({navigation}) {
             >
               <View
                 style={{
-                  width: 90,
-                  height: 90,
+                  width: 70,
+                  height: 70,
                   backgroundColor: "#FFE8D0",
                   borderRadius: 16,
                   justifyContent: "center",
@@ -750,8 +750,8 @@ export default function Home({navigation}) {
             >
               <View
                 style={{
-                  width: 90,
-                  height: 90,
+                  width: 70,
+                  height: 70,
                   backgroundColor: "#D5E0F8",
                   borderRadius: 16,
                   justifyContent: "center",
@@ -776,8 +776,8 @@ export default function Home({navigation}) {
             <TouchableOpacity style={{ flex: 1, alignItems: "center" }}>
               <View
                 style={{
-                  width: 90,
-                  height: 90,
+                  width: 70,
+                  height: 70,
                   backgroundColor: "#D8F5D8",
                   borderRadius: 16,
                   justifyContent: "center",

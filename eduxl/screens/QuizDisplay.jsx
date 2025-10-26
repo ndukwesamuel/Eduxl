@@ -45,9 +45,8 @@ const QuizDisplay = () => {
             examType: q.examtype,
             examYear: q.examyear,
             subject: data.data[0].subject,
-          }))
+          }));
         });
-        
 
         // Filter by subject and year
         let filtered = allQuestions.filter(
@@ -55,7 +54,6 @@ const QuizDisplay = () => {
             q.subject?.toLowerCase() === subject.toLowerCase() &&
             q.examYear?.toString() === year.toString()
         );
-        
 
         // Limit to numQuestions
         if (filtered.length > numQuestions) {
@@ -203,7 +201,9 @@ const QuizDisplay = () => {
             <Text style={styles.buttonText}>Restart Quiz</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.button, styles.restartButton]}
+            style={[styles.button, styles.restartButton, {
+              marginBottom: 23
+            }]}
             onPress={() =>
               navigation.navigate("QuizSetup", {
                 selectedSubjects: [
@@ -228,8 +228,27 @@ const QuizDisplay = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#059205ff" />
-
       <ScrollView style={styles.content}>
+        <TouchableOpacity
+          style={{
+            paddingVertical: 5,
+            paddingHorizontal: 12,
+            borderRadius: 50,
+            borderWidth: 2,
+            borderColor: "#059205ff",
+            marginBottom: 8,
+            width: "20%"
+          }}
+          onPress={() => navigation.goBack()}
+        >
+          <Text
+            style={{
+              textAlign: "center",
+            }}
+          >
+            {"<"}
+          </Text>
+        </TouchableOpacity>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>{subject.toUpperCase()} Quiz</Text>
           <Text style={styles.headerMeta}>
@@ -332,8 +351,14 @@ const styles = StyleSheet.create({
     borderColor: "#e5e7eb",
   },
   selectedOption: {
-    backgroundColor: "#dbeafe",
-    borderColor: "#059205ff",
+    backgroundColor: "#ffffff",
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#1732ccff",
   },
   optionLabel: {
     fontSize: 16,
