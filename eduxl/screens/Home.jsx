@@ -178,7 +178,7 @@
 //               marginRight: 12
 //             }}>
 //               <View style={{
-//                 width: 90,
+//                 width: 70,
 //                 height: 90,
 //                 backgroundColor: '#E8E0D8',
 //                 borderRadius: 16,
@@ -374,7 +374,7 @@ import {
   StatusBar,
 } from "react-native";
 
-export default function Home() {
+export default function Home({navigation}) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <StatusBar barStyle="dark-content" />
@@ -454,10 +454,13 @@ export default function Home() {
             alignItems: "center",
             marginBottom: 12,
             shadowColor: "#000",
-            shadowOffset: { width: 0, height: 2 },
+            shadowOffset: { width: 0, height: 1 },
             shadowOpacity: 0.1,
             shadowRadius: 4,
             elevation: 3,
+          }}
+          onPress={() => {
+            navigation.navigate("SubjectDisplay");
           }}
         >
           <View
@@ -580,8 +583,8 @@ export default function Home() {
             >
               <View
                 style={{
-                  width: 90,
-                  height: 90,
+                  width: 70,
+                  height: 70,
                   backgroundColor: "#E8E0D8",
                   borderRadius: 16,
                   justifyContent: "center",
@@ -605,8 +608,8 @@ export default function Home() {
             >
               <View
                 style={{
-                  width: 90,
-                  height: 90,
+                  width: 70,
+                  height: 70,
                   backgroundColor: "#E8D5F0",
                   borderRadius: 16,
                   justifyContent: "center",
@@ -637,8 +640,8 @@ export default function Home() {
             >
               <View
                 style={{
-                  width: 90,
-                  height: 90,
+                  width: 70,
+                  height: 70,
                   backgroundColor: "#D1E8F5",
                   borderRadius: 16,
                   justifyContent: "center",
@@ -656,8 +659,8 @@ export default function Home() {
             <TouchableOpacity style={{ flex: 1, alignItems: "center" }}>
               <View
                 style={{
-                  width: 90,
-                  height: 90,
+                  width: 70,
+                  height: 70,
                   backgroundColor: "#FFD8D8",
                   borderRadius: 16,
                   justifyContent: "center",
@@ -683,8 +686,8 @@ export default function Home() {
             >
               <View
                 style={{
-                  width: 90,
-                  height: 90,
+                  width: 70,
+                  height: 70,
                   backgroundColor: "#D1F2F8",
                   borderRadius: 16,
                   justifyContent: "center",
@@ -715,8 +718,8 @@ export default function Home() {
             >
               <View
                 style={{
-                  width: 90,
-                  height: 90,
+                  width: 70,
+                  height: 70,
                   backgroundColor: "#FFE8D0",
                   borderRadius: 16,
                   justifyContent: "center",
@@ -747,8 +750,8 @@ export default function Home() {
             >
               <View
                 style={{
-                  width: 90,
-                  height: 90,
+                  width: 70,
+                  height: 70,
                   backgroundColor: "#D5E0F8",
                   borderRadius: 16,
                   justifyContent: "center",
@@ -773,8 +776,8 @@ export default function Home() {
             <TouchableOpacity style={{ flex: 1, alignItems: "center" }}>
               <View
                 style={{
-                  width: 90,
-                  height: 90,
+                  width: 70,
+                  height: 70,
                   backgroundColor: "#D8F5D8",
                   borderRadius: 16,
                   justifyContent: "center",
@@ -800,7 +803,7 @@ export default function Home() {
       </ScrollView>
 
       {/* Bottom Navigation */}
-      <View
+      {/* <View
         style={{
           flexDirection: "row",
           justifyContent: "space-around",
@@ -826,7 +829,7 @@ export default function Home() {
         <TouchableOpacity style={{ alignItems: "center" }}>
           <Text style={{ fontSize: 24, color: "#999" }}>☰</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 }

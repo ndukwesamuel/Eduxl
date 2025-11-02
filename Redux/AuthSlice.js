@@ -55,7 +55,7 @@ export const AuthSlice = createSlice({
     reset_login: (state) => initialState,
     reset_other_login: (state) => {
       (state.user_isError = false),
-        (state.user_isLoading = false),
+        (state.user_isLoading = false), 
         (state.user_isSuccess = false),
         (state.user_message = null);
     },

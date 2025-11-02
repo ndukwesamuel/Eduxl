@@ -9,6 +9,8 @@ import {
   TextStyle,
   TouchableOpacity,
 } from "react-native";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import Entypo from "@expo/vector-icons/Entypo";
 
 type TabBarItemProps = {
   focused: boolean;
@@ -29,9 +31,9 @@ export const Tabcomponent = ({
   return (
     <View style={[containerStyle]}>
       {focused ? (
-        <Image source={iconFocused} style={{ width: 25, height: 25 }} />
+        <Entypo name="home" size={24} color="#059205ff" />
       ) : (
-        <Image source={iconUnfocused} style={{ width: 25, height: 25 }} />
+        <AntDesign name="home" size={24} color="#059205ff" />
       )}
       <Text
         style={[texttStyle, { fontWeight: "400", fontFamily: "Inter-Regular" }]}

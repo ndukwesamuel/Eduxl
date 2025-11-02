@@ -17,6 +17,7 @@ import {
   Tabcomponent,
 } from "../../components/shared/naviagetion";
 import Home from "../screens/Home";
+import DisplayAvaliableSubject from "../screens/displayAvaliableSubject";
 
 const Tab = createBottomTabNavigator();
 
@@ -60,6 +61,24 @@ const UserTabNavigation = () => {
           ),
         }}
       />
+      {/* <Tab.Screen
+        name="SubjectDisplay"
+        component={DisplayAvaliableSubject}
+        options={{
+          tabBarActiveTintColor: "#005091",
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <Tabcomponent
+              focused={focused}
+              iconFocused={require("../../assets/images/Account2.png")}
+              iconUnfocused={require("../../assets/images/Account.png")}
+              label="Account"
+              containerStyle={{ alignItems: "center", top: 10 }}
+              texttStyle={{ color: "#000000" }}
+            />
+          ),
+        }}
+      /> */}
     </Tab.Navigator>
   );
 };

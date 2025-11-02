@@ -7,7 +7,7 @@ import * as Sharing from "expo-sharing";
 
 import { View, Button, Alert, Platform } from "react-native";
 import * as WebBrowser from "expo-web-browser";
-import * as FileSystem from "expo-file-system";
+// import * as FileSystem from "expo-file-system";
 import ReceiptPDF from "./ReceiptPDF";
 import ScreenWrapper from "../../../components/shared/ScreenWrapper";
 import { useNavigation } from "@react-navigation/native";
