@@ -25,15 +25,10 @@
         "image": "macos-sonoma-14.6-xcode-16.0",
         "node": "20.11.1"
       },
-      "env": {
-        "EXPO_PUBLIC_API_URL": "https://pausepointbackend.onrender.com/"
-      },
+
       "channel": "production"
     },
     "test": {
-      "env": {
-        "EXPO_PUBLIC_API_URL": "https://pausepointbackend.onrender.com/"
-      },
       "channel": "test"
     }
   },

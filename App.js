@@ -11,7 +11,6 @@ import {
   Alert,
 } from "react-native";
 import Onboading from "./components/Onboard/Onboading ";
-import AppNavigation, { RootStackParamList } from "./navigation/AppNavigation";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import * as Notifications from "expo-notifications";
@@ -28,35 +27,15 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { QueryClient, QueryClientProvider } from "react-query";
-import Onboarding from "./components/Onboard/Onboading ";
-import LoginScreen from "./screens/LoginScreen";
-import {
-  NavigationContainer,
-  NavigationProp,
-  useNavigation,
-} from "@react-navigation/native";
-import Auth from "./screens/Auth";
+import { NavigationContainer } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import CreatePassword from "./screens/CreatePassword";
-// import UserTabNavigation from "./navigation/User/UserTabNavigation";
-import AdminTabNavigation from "./navigation/Admin/AdminTabNavigation";
-import Adminnaviagetion from "./navigation/Admin/Adminnaviagetion";
-import { Usernaviagetion } from "./navigation/User/Usernaviagetion";
-import { UserProfile_data_Fun } from "./Redux/ProfileSlice";
-import { Get_User_Profle_Fun } from "./Redux/UserSide/UserProfileSlice";
-import { notificationservicecode } from "./utils/notificationservice";
 const API_BASEURL = process.env.EXPO_PUBLIC_API_URL;
 
-import { setOnlineUser, setSocketConnection } from "./Redux/socketSlice";
 import { Linking } from "react-native";
 import { pushtokendata, reset_login } from "./Redux/AuthSlice";
 
 import * as Device from "expo-device";
-import RunnerNavigation from "./App/Runners/RunnerNavigation";
-import GuestNavigation from "./App/Guest/Navigation/GuestNavigation";
-import UserAccountNavigation from "./eduxl/navigation/UserAccountNavigation";
-import UserTabNavigation from "./eduxl/navigation/UserTabNavigation";
 import UserStackNavigation from "./eduxl/navigation/UserStackNavigation";
 
 const queryClient = new QueryClient();
@@ -108,96 +87,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-
-export const StartScreen = ({}) => {
-  const { isOnboarding } = useSelector((state) => state.OnboardingSlice);
-  const navigation = useNavigation();
-
-  return <>{isOnboarding ? <Auth /> : <Onboarding />}</>;
-};
-
-export const MainScreen = ({}) => {
-  const { isOnboarding } = useSelector((state) => state.OnboardingSlice);
-  const navigation = useNavigation();
-  const dispatch = useDispatch();
-  const {
-    user_data,
-    user_isError,
-    user_isSuccess,
-    user_isLoading,
-    user_message,
-  } = useSelector((state) => state.AuthSlice);
-
-  const { userProfile_data } = useSelector((state) => state.ProfileSlice);
-  const datasss = useSelector((state) => state.UserProfileSlice);
-  const isAdmin = user_data?.user?.roles?.includes("admin");
-
-  Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-      shouldShowAlert: true,
-      shouldPlaySound: false,
-      shouldSetBadge: false,
-    }),
-  });
-
-  const [pushToken, setPushToken] = useState();
-
-  useEffect(() => {
-    dispatch(UserProfile_data_Fun());
-    dispatch(Get_User_Profle_Fun());
-  }, [dispatch]);
-
-  useEffect(() => {
-    const backgroundSubscription =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log({ response });
-        const data = response.notification.request.content.data;
-      });
-
-    const foregroundSubscription =
-      Notifications.addNotificationReceivedListener(async (notification) => {
-        notificationservicecode(notification?.request?.content?.data);
-      });
-
-    return () => {
-      backgroundSubscription.remove();
-      foregroundSubscription.remove();
-    };
-  }, []);
-
-  useEffect(() => {
-    const socketConnection = io(API_BASEURL, {
-      auth: {
-        token: user_data?.token,
-      },
-    });
-
-    socketConnection.on("onlineUser", (data) => {
-      dispatch(setOnlineUser(data));
-    });
-
-    dispatch(setSocketConnection(socketConnection));
-
-    return () => {
-      socketConnection.disconnect();
-    };
-  }, []);
-
-  return (
-    <Stack.Navigator
-      initialRouteName="UserNavigation"
-      screenOptions={{ headerShown: false }}
-    >
-      {userProfile_data?.AdmincurrentClanMeeting && (
-        <Stack.Screen name="AdminTab" component={Adminnaviagetion} />
-      )}
-      {!userProfile_data?.AdmincurrentClanMeeting && (
-        <Stack.Screen name="UserNavigation" component={Usernaviagetion} />
-      )}
-      <Stack.Screen name="CreatePassword" component={CreatePassword} />
-    </Stack.Navigator>
-  );
-};
 
 export const NavigationScreen = () => {
   const {
@@ -263,38 +152,10 @@ export const NavigationScreen = () => {
   return (
     <NavigationContainer>
       <AppNotification />
-      {forceUpdate ? (
-        <UpdateScreen message={updateInfo?.message} />
-      ) : (
-        // <>{user__data ? <UserTabNavigation /> : <StartScreen />}</>
-        <>{user__data ? <UserStackNavigation /> : <StartScreen />}</>
-      )}
-      <Toast />
+      <UserStackNavigation />
     </NavigationContainer>
   );
 };
-
-const UserAndGuest = () => {
-  const {
-    user_data,
-    user_isError,
-    user_isSuccess,
-    user_isLoading,
-    user_message,
-  } = useSelector((state) => state.AuthSlice);
-  const dispatch = useDispatch();
-
-  console.log({
-    fireme: user_data?.user?.isGuest,
-  });
-
-  return;
-  <>{user_data?.user?.isGuest ? <GuestNavigation /> : <MainScreen />}</>;
-};
-
-{
-  /* <MainScreen /> */
-}
 
 export const UpdateScreen = ({ message }) => {
   const handleUpdate = () => {

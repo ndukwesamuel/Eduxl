@@ -4,13 +4,6 @@ import { AntDesign } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import { StyleSheet } from "react-native";
 
-// Screens
-// import Home from "../../screens/Customerinterface/Home";
-import Account from "../../screens/Customerinterface/Account/Account";
-import Guests from "../../screens/Customerinterface/Guest/Guests";
-import Neigborhood from "../../screens/Customerinterface/Neigborhood";
-import Errand from "../../screens/Customerinterface/Errands/Errand";
-
 // Components
 import {
   CustomTabButton,
@@ -22,9 +15,6 @@ import DisplayAvaliableSubject from "../screens/displayAvaliableSubject";
 const Tab = createBottomTabNavigator();
 
 const UserTabNavigation = () => {
-  const { userProfile_data } = useSelector((state) => state.ProfileSlice);
-  const isGuest = userProfile_data?.user?.isGuest;
-
   return (
     <Tab.Navigator
       initialRouteName="Home"
